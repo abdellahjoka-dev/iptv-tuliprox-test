@@ -1,0 +1,15 @@
+server:
+  - name: default
+    protocol: https
+    host: iptv-tuliprox-test-84lb.onrender.com
+    port: 443
+    timezone: Europe/Madrid
+    message: Welcome to Tuliprox
+
+user:
+  - target: clean_list
+    credentials:
+      - username: "${env:OUTPUT_USERNAME}"
+        password: "${env:OUTPUT_PASSWORD}"
+        proxy: reverse
+        server: default
