@@ -1,6 +1,10 @@
 api:
   host: 0.0.0.0
   port: 8901
+  web_root: ./web
+
+storage_dir: ./data
+update_on_boot: true
 
 web_ui:
   enabled: true
