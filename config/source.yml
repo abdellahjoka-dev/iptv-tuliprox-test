@@ -1,0 +1,14 @@
+inputs:
+  - type: xtream
+    name: my_provider
+    url: http://nomadiptv.online:25461
+    username: "${env:IPTV_USERNAME}"
+    password: "${env:IPTV_PASSWORD}"
+
+sources:
+  - inputs:
+      - my_provider
+    targets:
+      - name: clean_list
+        output:
+          - type: xtream
