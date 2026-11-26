@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: iptv-tuliprox-test
+    runtime: image
+    image:
+      url: ghcr.io/euzu/tuliprox-alpine:latest
+    region: frankfurt
+    plan: free
+    healthCheckPath: /healthcheck
+    envVars:
+      - key: PORT
+        value: "8901"
+      - key: TZ
+        value: Europe/Madrid
+      - key: TULIPROX_JWT_SECRET
+        generateValue: true
