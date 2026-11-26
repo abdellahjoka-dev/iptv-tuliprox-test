@@ -12,3 +12,4 @@ sources:
       - name: clean_list
         output:
           - type: xtream
+            filter: 'Group ~ ".*"'
