@@ -10,6 +10,6 @@ sources:
       - my_provider
     targets:
       - name: clean_list
+        filter: 'Group ~ ".*"'
         output:
           - type: xtream
-            filter: 'Group ~ ".*"'
