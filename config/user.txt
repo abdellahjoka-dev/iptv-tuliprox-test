@@ -1,0 +1,1 @@
+admin:$argon2id$v=19$m=65536,t=3,p=2$eWchLrnzz0t+KB7znPVh+w$OI62z598o+lcvxg78kcJk7EQ4wwIC9ojt/PMN9CZX88
