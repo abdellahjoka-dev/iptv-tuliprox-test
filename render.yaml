@@ -1,9 +1,8 @@
 services:
   - type: web
-    name: iptv-tuliprox-test
-    runtime: image
-    image:
-      url: ghcr.io/euzu/tuliprox-alpine:latest
+    name: iptv-tuliprox-test-84lb
+    runtime: docker
+    dockerfilePath: ./Dockerfile
     region: frankfurt
     plan: free
     healthCheckPath: /healthcheck
@@ -14,3 +13,11 @@ services:
         value: Europe/Madrid
       - key: TULIPROX_JWT_SECRET
         generateValue: true
+      - key: OUTPUT_USERNAME
+        generateValue: true
+      - key: OUTPUT_PASSWORD
+        generateValue: true
+      - key: IPTV_USERNAME
+        sync: false
+      - key: IPTV_PASSWORD
+        sync: false
