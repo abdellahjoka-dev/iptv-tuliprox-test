@@ -5,8 +5,8 @@ inputs:
     username: "${env:IPTV_USERNAME}"
     password: "${env:IPTV_PASSWORD}"
     options:
-      skip_vod: true
-      skip_series: true
+      xtream_skip_vod: true
+      xtream_skip_series: true
 
 sources:
   - inputs:
