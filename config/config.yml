@@ -5,6 +5,7 @@ api:
 
 storage_dir: ./data
 update_on_boot: true
+disk_based_processing: true
 
 web_ui:
   enabled: true
