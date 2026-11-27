@@ -13,5 +13,5 @@ web_ui:
     enabled: true
     issuer: tuliprox
     secret: "${env:TULIPROX_JWT_SECRET}"
-    token_ttl_mins: 30
+    token_ttl_mins: 1440
     userfile: user.txt
