@@ -5,7 +5,6 @@ services:
     dockerfilePath: ./Dockerfile
     region: frankfurt
     plan: free
-    healthCheckPath: /healthcheck
     envVars:
       - key: PORT
         value: "8901"
