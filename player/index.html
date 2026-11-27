@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tuliprox Live Test</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1020;--panel:#151d32;--line:#293653;--accent:#24d6a1;--muted:#aab6ca}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 85% 0,#17364a 0,transparent 36%),var(--bg);color:#f4f7fb;font:16px system-ui,Arial,sans-serif}
+main{max-width:980px;margin:auto;padding:22px 15px 50px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.logo{font-weight:800;font-size:21px}.tag{color:var(--accent);font-size:12px;border:1px solid #236b5a;padding:6px 10px;border-radius:20px}
+h1{font-size:25px;margin:12px 0 6px}p{color:var(--muted);line-height:1.7;margin:5px 0 15px}.panel{background:rgba(21,29,50,.94);border:1px solid var(--line);border-radius:18px;padding:17px;margin:14px 0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}label{display:block;color:#cbd5e4;font-size:13px;margin:8px 0 6px}input{width:100%;background:#0d1528;color:white;border:1px solid #344360;border-radius:10px;padding:12px;font-size:15px;direction:ltr}
+button,.filebtn{border:0;border-radius:11px;padding:12px 16px;background:var(--accent);color:#061b17;font-weight:800;font-size:14px;cursor:pointer;display:inline-block;margin-top:12px}
+button.secondary{background:#293753;color:#e8eef8}button:disabled{opacity:.5}.note{font-size:12px;color:#93a3bb}.actions{display:flex;gap:9px;flex-wrap:wrap}
+video{width:100%;aspect-ratio:16/9;background:#03060c;border-radius:13px;margin-top:10px}
+#channels{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:9px;margin-top:12px}
+.channel{background:#0e172b;border:1px solid #2a3957;color:#f4f7fb;border-radius:12px;padding:12px;text-align:right;cursor:pointer;min-height:60px}
+.channel.active{border-color:var(--accent);background:#12352f}.channel small{display:block;color:#93a3bb;margin-top:4px}
+#status{padding:10px;border-radius:10px;background:#0d1528;color:#b9c9df;margin-top:12px;font-size:13px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}h1{font-size:22px}.top{align-items:flex-start}}
+</style></head>
+<body><main>
+<div class="top"><div class="logo">◉ TULIPROX PLAYER</div><span class="tag">اختبار خاص للبث</span></div>
+<h1>مشغّل القنوات التجريبي</h1>
+<p>هذه صفحة مستقلة لا تغيّر موقعك الأساسي. أنشئ رابط قائمة القنوات من Tuliprox، نزّل ملف M3U ثم ارفعه هنا لتظهر القنوات وتختبر تشغيلها.</p>
+<section class="panel">
+<h3>1 ـ الاتصال بوسيط Tuliprox</h3>
+<div class="grid">
+<div><label>رابط Tuliprox</label><input id="host" value="https://iptv-tuliprox-test-84lb-84lb.onrender.com" autocomplete="off"></div>
+<div><label>اسم مستخدم الإخراج</label><input id="user" placeholder="OUTPUT_USERNAME" autocomplete="off"></div>
+<div><label>كلمة مرور الإخراج</label><input id="pass" type="password" placeholder="OUTPUT_PASSWORD" autocomplete="off"></div>
+</div>
+<div class="actions"><button id="openList">فتح / تنزيل قائمة القنوات</button></div>
+<p class="note">أدخل بيانات إخراج Tuliprox التي أنشأتها الخدمة، وليس بيانات اشتراك المزود الأصلي. لا تحفظ الصفحة هذه البيانات.</p>
+</section>
+<section class="panel">
+<h3>2 ـ تحميل قائمة M3U</h3>
+<label for="file">اختر ملف M3U الذي نزّلته من الخطوة السابقة</label>
+<input id="file" type="file" accept=".m3u,.m3u8,.txt,audio/x-mpegurl,application/vnd.apple.mpegurl">
+<div id="status">بانتظار ملف قائمة القنوات.</div>
+</section>
+<section class="panel">
+<h3>3 ـ المشغّل</h3>
+<video id="video" controls playsinline></video>
+<div id="now" class="note">لم يتم اختيار قناة بعد.</div>
+<div id="channels"></div>
+</section>
+<p class="note">ملاحظة: تشغيل البث داخل المتصفح يعتمد على صيغة القناة ودعمها. إن لم تعمل قناة واحدة، جرّب قناة أخرى أو تطبيق IPTV يدعم رابط Xtream.</p>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
+<script src="https://cdn.jsdelivr.net/npm/mpegts.js@1.7.3/dist/mpegts.min.js"></script>
+<script>
+const $=id=>document.getElementById(id);let entries=[],hls=null,flv=null;
+function setStatus(s){$('status').textContent=s}
+$('openList').onclick=()=>{const base=$('host').value.trim().replace(/\/$/,'');const u=$('user').value.trim(),p=$('pass').value;if(!base||!u||!p){setStatus('أدخل رابط Tuliprox واسم المستخدم وكلمة المرور أولاً.');return}const url=base+'/get.php?username='+encodeURIComponent(u)+'&password='+encodeURIComponent(p)+'&type=m3u_plus&output=ts';window.open(url,'_blank','noopener');setStatus('فتحت رابط القائمة. نزّل ملف M3U ثم اختره في الخطوة الثانية.')};
+function parseM3U(text){const lines=text.replace(/^\uFEFF/,'').split(/\r?\n/);const list=[];let meta='';for(const line0 of lines){const line=line0.trim();if(!line)continue;if(line.startsWith('#EXTINF'))meta=line;else if(!line.startsWith('#')&&/^https?:\/\//i.test(line)){const m=meta.match(/,(.*)$/);const name=m?m[1].trim():'قناة بدون اسم';const group=(meta.match(/group-title="([^"]*)"/i)||[])[1]||'غير مصنف';list.push({name,group,url:line});meta=''}}return list}
+$('file').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{entries=parseM3U(await f.text());$('channels').innerHTML='';entries.forEach((c,i)=>{const b=document.createElement('button');b.className='channel';b.innerHTML='<strong></strong><small></small>';b.querySelector('strong').textContent=c.name;b.querySelector('small').textContent=c.group;b.onclick=()=>play(c,b);$('channels').appendChild(b)});setStatus('تم تحميل '+entries.length+' قناة من القائمة. اضغط على قناة للتشغيل.')}catch(err){setStatus('تعذّر قراءة الملف: '+err.message)}};
+function play(c,btn){document.querySelectorAll('.channel').forEach(x=>x.classList.remove('active'));btn.classList.add('active');if(hls){hls.destroy();hls=null}if(flv){flv.destroy();flv=null}const v=$('video');v.pause();v.removeAttribute('src');v.load();$('now').textContent='القناة الحالية: '+c.name;const url=c.url;
+if(/\.m3u8($|\?)/i.test(url)){if(v.canPlayType('application/vnd.apple.mpegurl')){v.src=url;v.play().catch(()=>{})}else if(window.Hls&&Hls.isSupported()){hls=new Hls({enableWorker:true});hls.loadSource(url);hls.attachMedia(v);hls.on(Hls.Events.MANIFEST_PARSED,()=>v.play().catch(()=>{}))}else{$('now').textContent+=' — المتصفح لا يدعم HLS.'}}
+else if(window.mpegts&&mpegts.isSupported()&&(/\.ts($|\?)/i.test(url)||/output=ts/i.test(url))){flv=mpegts.createPlayer({type:'mpegts',isLive:true,url});flv.attachMediaElement(v);flv.load();flv.play().catch(()=>{})}
+else{v.src=url;v.play().catch(()=>{$('now').textContent+=' — صيغة البث قد لا يدعمها المتصفح؛ جرّب VLC أو تطبيق IPTV.'})}}
+</script></body></html>
