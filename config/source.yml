@@ -14,3 +14,5 @@ sources:
         output:
           - type: xtream
             filter: 'Group ~ ".*"'
+          - type: m3u
+            filter: 'Group ~ ".*"'
