@@ -4,6 +4,9 @@ inputs:
     url: http://nomadiptv.online:25461
     username: "${env:IPTV_USERNAME}"
     password: "${env:IPTV_PASSWORD}"
+    options:
+      skip_vod: true
+      skip_series: true
 
 sources:
   - inputs:
